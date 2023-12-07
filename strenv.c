@@ -43,7 +43,7 @@ int rmsetenv(system *systeminfo, char *varstr)
 			ptrnode = systeminfo->varenv;
 			continue;
 		}
-		ptrnode = ptrnode->next;
+		ptrnode = ptrnode->next_node;
 		u++;
 	}
 	return (systeminfo->altered_env);
@@ -84,7 +84,7 @@ int setenvset(system *systeminfo, char *varstr, char *ptrval)
 			systeminfo->altered_env = 1;
 			return (0);
 		}
-		ptrnode = ptrnode->next;
+		ptrnode = ptrnode->next_node;
 	}
 	putnode_end(&(systeminfo->varenv), buf, 0);
 	free(buf);

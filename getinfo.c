@@ -62,11 +62,11 @@ void memfrinfo(system *systeminfo, int total)
 			memlist(&(systeminfo->envcpy));
 		if (systeminfo->hist)
 			memfree(&(systeminfo->hist));
-		if (systeminfo->alias)
-			memfree(&(systeminfo->alias));
+		if (systeminfo->aka)
+			memfree(&(systeminfo->aka));
 		freemem(systeminfo->environcpy);
 			systeminfo->environcpy = NULL;
-		clearmem((void **)systeminfo->cmd_buf);
+		clearmem((void **)systeminfo->buf_cmd);
 		if (systeminfo->rdfiledes > 2)
 			close(systeminfo->rdfiledes);
 		_putchar(FLUSH_INDICATOR);

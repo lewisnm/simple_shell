@@ -29,7 +29,7 @@ char *retrienv(system *systeminfo, const char *ptrenv)
 		y = starts_with(ptrnode->str, ptrenv);
 		if (y && *y)
 			return (y);
-		ptrnode = ptrnode->next;
+		ptrnode = ptrnode->next_node;
 	}
 	return (NULL);
 }
