@@ -1,13 +1,13 @@
 #include "dupshell.h"
 
 /**
- * **tkzstr - function to split user input string into arguments
+ * **tkzStr - function to split user input string into arguments
  * @str: user input, char array string
  * @dlmt: delimiter character
  * Return: NULL if fail, else ptr to string array
  */
 
-char **tkzstr(char *str, char *dlmt)
+char **tkzStr(char *str, char *dlmt)
 {
 	int x, y, z, j, wordcount = 0;
 	char **i;
@@ -49,12 +49,12 @@ char **tkzstr(char *str, char *dlmt)
 }
 
 /**
- * **tkzstr2 - func that split char array string to args
+ * **tkzStr2 - func that split char array string to args
  * @str: user input in CLI
  * @dlmt: denote delimiter character
  * Return: NULL if fail, ptr to arr of strings
  */
-char **tkzstr2(char *str, char dlmt)
+char **tkzStr2(char *str, char dlmt)
 {
 	int x, y, z, j, wordcount = 0;
 	char **i;
