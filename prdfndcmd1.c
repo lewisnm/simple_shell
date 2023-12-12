@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "dupshell.h"
 
 /**
  * histdisp - displays the history list

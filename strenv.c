@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "dupshell.h"
 
 /**
  * strenv - arr of strings for environ is returned

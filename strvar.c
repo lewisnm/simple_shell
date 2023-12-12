@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "dupshell.h"
 /**
  * check_opp - checks if current char is a chain delimeter
  * @d_typeinfo: the parameter struct

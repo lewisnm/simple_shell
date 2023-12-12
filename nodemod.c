@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "dupshell.h"
 
 /**
  * putnode_start - adds a node at the start of a list

@@ -1,5 +1,4 @@
-
-#include "shell.h"
+#include "dupshell.h"
 
 /**
  * strexec - main shell loop

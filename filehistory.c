@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "dupshell.h"
 
 /**
  * rethistfile - custom fucntion to fetch a file's history

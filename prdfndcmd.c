@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "dupshell.h"
 
 /**
  * exitbin - this function indicates the exit of the custom shell

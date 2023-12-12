@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "dupshell.h"
 
 /**
  **filblock - custom memset; fill byteno=memry block with constant/similar byte
