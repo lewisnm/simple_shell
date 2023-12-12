@@ -2,7 +2,7 @@
 
 /**
  * **tkzStr - function to split user input string into arguments
- * @str: user input, char array string
+ * @string: user input, char array string
  * @dlmt: delimiter character
  * Return: NULL if fail, else ptr to string array
  */

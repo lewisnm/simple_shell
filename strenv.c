@@ -20,9 +20,9 @@ char **strenv(d_type *d_typeinfo)
 /**
  * rmsetenv - env varbl is eliminated
  * @d_typeinfo: struct with args, mntn con func prototype
+ * @varbl: property of env variable string
  *
- *  Return: 1 if rm success, 0 otherwise
- * @varstr: property of env variable string
+ * Return: 1 i rm success, 0 otherwise
  */
 int rmsetenv(d_type *d_typeinfo, char *varbl)
 {
@@ -53,8 +53,8 @@ int rmsetenv(d_type *d_typeinfo, char *varbl)
  * setenvset - func to assgn val to new env varbl
  *             function to manipulate or mod already existing env varbl
  * @d_typeinfo: struct with args, mntn con func prototype
- * @varstr: property of the current env varbl string
- * @ptrval: val of current env varbl string
+ * @varbl: property of the current env varbl string
+ * @val: val of current env varbl string
  *
  *  Return: 0 on code execution success
  */

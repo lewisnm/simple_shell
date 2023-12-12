@@ -2,7 +2,7 @@
 
 /**
  * cmd_exist - finds executable file in command
- * @systeminfo: the systeminfo struct
+ * @d_typeinfo: the systeminfo struct
  * @path: denotes path of the file to be executed
  *
  * Return: 0 on code success, 1 if error

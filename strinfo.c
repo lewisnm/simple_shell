@@ -13,8 +13,9 @@ void resetinfo(d_type *d_typeinfo)
 }
 
 /**
- * resetinfo - denotes struct named system
+ * settinginfo - denotes struct named system
  * @d_typeinfo: & of struct; hexadecimal val
+ * @av: argument vector
  */
 void settinginfo(d_type *d_typeinfo, char **av)
 {

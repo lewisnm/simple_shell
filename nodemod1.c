@@ -20,7 +20,7 @@ size_t szlst(const lst_t *hd)
 
 /**
  * lsttostr - returns array of strings of the list->wrd
- * @hd: first nodePtr pointer
+ * @start: first nodePtr pointer
  *
  * Return: array of strings
  */

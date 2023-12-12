@@ -4,7 +4,7 @@
  **str_n_cpy - makes a copy of a string
  *@destin: where the string id to be copied to
  *@srcString: the original string
- *@no: no of chrs to be copied
+ *@n: no of chrs to be copied
  *Return: the concatenated string
  */
 char *str_n_cpy(char *destin, char *srcString, int n)
@@ -32,9 +32,9 @@ char *str_n_cpy(char *destin, char *srcString, int n)
 
 /**
  **str_n_cat - joins two strings
- *@trgt: first string
- *@ori: second string
- *@num: num of bytes used
+ *@destin: first string
+ *@srcString: second string
+ *@n: num of bytes used
  *Return: the concatenated string
  */
 char *str_n_cat(char *destin, char *srcString, int n)
@@ -60,7 +60,7 @@ char *str_n_cat(char *destin, char *srcString, int n)
 /**
  **str_chr - finds a char in a string
  *@str: string being checked
- *@cha: char being searched
+ *@y: char being searched
  *Return: (str) a pointer to the memory area str
  */
 char *str_chr(char *str, char y)

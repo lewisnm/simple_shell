@@ -74,7 +74,7 @@ lst_t *putnode_end(lst_t **start, const char *string, int no)
 }
 
 /**
- * printlststr - prints the string'th value of a list
+ * printstrlst - prints the string'th value of a list
  * @hd: pointer to first node
  *
  * Return: size of list

@@ -14,7 +14,7 @@ int histdisp(d_type *d_typeinfo)
 /**
  * rmaka - removes alias to string
  * @d_typeinfo: parameter struct
- * @word: the string alias
+ * @string: the string alias
  *
  * Return:0 on success, 1 on error
  */
@@ -37,7 +37,7 @@ int rmaka(d_type *d_typeinfo, char *string)
 /**
  * setaka - sets alias to string
  * @d_typeinfo: parameter struct
- * @word: the string alias
+ * @string: the string alias
  *
  * Return: 0 on success, 1 on error
  */
@@ -57,7 +57,7 @@ int setaka(d_type *d_typeinfo, char *string)
 
 /**
  * printaka - prints an alias string
- * @nde: the alias node
+ * @node: the alias node
  *
  * Return: Always 0 on success, 1 on error
  */
