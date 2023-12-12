@@ -1,4 +1,4 @@
-#include "dubshell.h"
+#include "dupshell.h"
 
 /**
  * szlst - length of linked list
@@ -24,22 +24,22 @@ size_t szlst(const lst_t *hd)
  *
  * Return: array of strings
  */
-char **lsttostr(lst_t *hd)
+char **lsttostr(lst_t *start)
 {
-	lst_t *nde = hd;
-	size_t p = szlst(hd), k;
+	lst_t *nde = start;
+	size_t p = szlst(start), k;
 	char **wrds;
-	char *word;
+	char *string;
 
-	if (!hd || !k)
+	if (!start || !p)
 		return (NULL);
 	wrds = malloc(sizeof(char *) * (p + 1));
 	if (!wrds)
 		return (NULL);
 	for (p = 0; nde; nde = nde->next_node, p++)
 	{
-		word = malloc(str_len(nde->wrd) + 1);
-		if (!word)
+		string = malloc(str_len(nde->string) + 1);
+		if (!string)
 		{
 			for (k = 0; k < p; k++)
 				free(wrds[k]);
@@ -47,10 +47,10 @@ char **lsttostr(lst_t *hd)
 			return (NULL);
 		}
 
-		word = str_cpy(word, nde->wrd);
-		wrds[p] = word;
+		string = str_cpy(string, nde->string);
+		wrds[p] = string;
 	}
-	wrds[i] = NULL;
+	wrds[p] = NULL;
 	return (wrds);
 }
 
@@ -70,7 +70,7 @@ size_t putlst(const lst_t *hd)
 		_puts(stringify_no(hd->no, 10, 0));
 		_putchar(':');
 		_putchar(' ');
-		_puts(hd->wrd ? hd->wrd : "(nil)");
+		_puts(hd->string ? hd->string : "(nil)");
 		_puts("\n");
 		hd = hd->next_node;
 		d++;
@@ -92,7 +92,7 @@ lst_t *specprefix(lst_t *nde, char *prfx, char l)
 
 	while (nde)
 	{
-		r = str_start(nde->wrd, prfx);
+		r = str_start(nde->string, prfx);
 		if (r && ((l == -1) || (*r == l)))
 			return (nde);
 		nde = nde->next_node;
@@ -107,15 +107,15 @@ lst_t *specprefix(lst_t *nde, char *prfx, char l)
  *
  * Return: index of node or -1
  */
-ssize_t retrindex(lst_t *hd, lst_t *nde)
+ssize_t retrindex(lst_t *start, lst_t *nde)
 {
 	size_t h = 0;
 
-	while (hd)
+	while (start)
 	{
-		if (hd == nde)
+		if (start == nde)
 			return (h);
-		hd = hd->next_node;
+		start = start->next_node;
 		h++;
 	}
 	return (-1);

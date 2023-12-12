@@ -1,4 +1,4 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * str_len - custom function that performs purpose of custom strlen
@@ -8,14 +8,14 @@
  */
 int str_len(char *ptrstr)
 {
-	int w = 0;
+	int j = 0;
 
 	if (!ptrstr)
 		return (0);
 
 	while (*ptrstr++)
-		w++;
-	return (w);
+		j++;
+	return (j);
 }
 
 /**
@@ -45,7 +45,7 @@ int str_cmp(char *ptrstr1, char *ptrstr2)
  * @strptr: 1st arg, the string to be passed
  * @strarg: the substring being sought out for
  *
- * Return: &of the larger string's next char, else NULL
+ * Return: &of the larger string'ptrstr next char, else NULL
  */
 char *str_start(const char *strptr, const char *strarg)
 {
@@ -64,12 +64,12 @@ char *str_start(const char *strptr, const char *strarg)
  */
 char *str_cat(char *ptrbufdest, char *ptrbufsrc)
 {
-	char *return_ptr = ptrbufdest;
+	char *ret = ptrbufdest;
 
 	while (*ptrbufdest)
 		ptrbufdest++;
 	while (*ptrbufsrc)
 		*ptrbufdest++ = *ptrbufsrc++;
 	*ptrbufdest = *ptrbufsrc;
-	return (return_ptr);
+	return (ret);
 }

@@ -1,159 +1,158 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * putnode_start - adds a node at the start of a list
- * @start: pointer to head node
- * @wrd: str field of node
- * @fig: node index
+ * @start: pointer to start node
+ * @string: str field of node
+ * @no: node ndx
  *
  * Return: size of list
  */
-lst_t *putnode_start(lst_t **start, const char *wrd, int fig)
+lst_t *putnode_start(lst_t **start, const char *string, int no)
 {
-	lst_t *newNode;
+	lst_t *newHd;
 
 	if (!start)
 		return (NULL);
-	newNode = malloc(sizeof(lst_t));
-	if (!newNode)
+	newHd = malloc(sizeof(lst_t));
+	if (!newHd)
 		return (NULL);
-	filblock((void *)newNode, 0, sizeof(lst_t));
-	newNode->fig = fig;
-	if (wrd)
+	filblock((void *)newHd, 0, sizeof(lst_t));
+	newHd->no = no;
+	if (string)
 	{
-		newNode->wrd = str_dup(wrd);
-		if (!newNode->wrd)
+		newHd->string = str_dup(string);
+		if (!newHd->string)
 		{
-			free(newNode);
+			free(newHd);
 			return (NULL);
 		}
 	}
-	newNode->next_node = *start;
-	*start = newNode;
-	return (newNode);
+	newHd->next_node = *start;
+	*start = newHd;
+	return (newHd);
 }
-
 /**
  * putnode_end - adds a node at the end of a list
- * @start: address of pointer to head node
- * @wrd: wrd field of node
- * @fig: node index
+ * @start: address of pointer to start node
+ * @string: string field of node
+ * @no: node ndx
  *
  * Return: size of list
  */
-lst_t *putnode_end(lst_t **start, const char *wrd, int fig)
+lst_t *putnode_end(lst_t **start, const char *string, int no)
 {
-	lst_t *newNode, *nde;
+	lst_t *newHd, *nodePtr;
 
 	if (!start)
 		return (NULL);
 
-	nde = *start;
-	newNode = malloc(sizeof(lst_t));
-	if (!newNode)
+	nodePtr = *start;
+	newHd = malloc(sizeof(lst_t));
+	if (!newHd)
 		return (NULL);
-	filblock((void *)newNode, 0, sizeof(lst_t));
-	newNode->fig = fig;
-	if (wrd)
+	filblock((void *)newHd, 0, sizeof(lst_t));
+	newHd->no = no;
+	if (string)
 	{
-		newNode->wrd = str_dup(wrd);
-		if (!newNode->wrd)
+		newHd->string = str_dup(string);
+		if (!newHd->string)
 		{
-			free(newNode);
+			free(newHd);
 			return (NULL);
 		}
 	}
-	if (nde)
+	if (nodePtr)
 	{
-		while (nde->next_node)
-			nde = nde->next_node;
-		nde->next_node = newNode;
+		while (nodePtr->next_node)
+			nodePtr = nodePtr->next_node;
+		nodePtr->next_node = newHd;
 	}
 	else
-		*start = newNode;
-	return (newNode);
+		*start = newHd;
+	return (newHd);
 }
 
 /**
- * printlststr - prints the wrd'th value of a list
+ * printlststr - prints the string'th value of a list
  * @hd: pointer to first node
  *
  * Return: size of list
  */
-size_t printlststr(const lst_t *hd)
+size_t printstrlst(const lst_t *hd)
 {
-	size_t l = 0;
+	size_t k = 0;
 
 	while (hd)
 	{
-		_puts(hd->wrd ? h->wrd : "(nil)");
+		_puts(hd->string ? hd->string : "(nil)");
 		_puts("\n");
 		hd = hd->next_node;
-		l++;
+		k++;
 	}
-	return (l);
+	return (k);
 }
 
 /**
- * rmnodeindex - removes a node at a given index
+ * rmnodeindex - removes a node at a given ndx
  * @start: address of pointer to first node
- * @ndx: index of node to remove
+ * @ndx: ndx of node to remove
  *
  * Return: 1 success, 0 fail
  */
 int rmnodeindex(lst_t **start, unsigned int ndx)
 {
-	lst_t *nde, *prvnd;
-	unsigned int g = 0;
+	lst_t *nodePtr, *prvnd;
+	unsigned int k = 0;
 
 	if (!start || !*start)
 		return (0);
 
 	if (!ndx)
 	{
-		nde = *start;
+		nodePtr = *start;
 		*start = (*start)->next_node;
-		free(nde->wrd);
-		free(nde);
+		free(nodePtr->string);
+		free(nodePtr);
 		return (1);
 	}
-	nde = *start;
-	while (nde)
+	nodePtr = *start;
+	while (nodePtr)
 	{
-		if (g == ndx)
+		if (k == ndx)
 		{
-			prvnd->next_node = nde->next_node;
-			free(nde->wrd);
-			free(nde);
+			prvnd->next_node = nodePtr->next_node;
+			free(nodePtr->string);
+			free(nodePtr);
 			return (1);
 		}
-		g++;
-		prvnd = nde;
-		nde = nde->next_node;
+		k++;
+		prvnd = nodePtr;
+		nodePtr = nodePtr->next_node;
 	}
 	return (0);
 }
 
 /**
  * memfree - frees all nodes
- * @hdptr: address of head node
+ * @hdptr: address of start node
  *
  * Return: void
  */
 void memfree(lst_t **hdptr)
 {
-	lst_t *nde, *nxtnd, *hd;
+	lst_t *nodePtr, *next_node, *start;
 
 	if (!hdptr || !*hdptr)
 		return;
-	hd = *hdptr;
-	nde = hd;
-	while (nde)
+	start = *hdptr;
+	nodePtr = start;
+	while (nodePtr)
 	{
-		nxtnd = nde->next_node;
-		free(nde->wrd);
-		free(nde);
-		nde = nxtnd;
+		next_node = nodePtr->next_node;
+		free(nodePtr->string);
+		free(nodePtr);
+		nodePtr = next_node;
 	}
 	*hdptr = NULL;
 }

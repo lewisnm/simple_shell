@@ -1,21 +1,21 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * output - prints string to CLI
- * @str: user input string
+ * @string: user input string
  *
- * Return: none ad void d_type is returned
+ * Return: none as void d_type is returned
  */
-void output(char *str)
+void output(char *string)
 {
-	int m = 0;
+	int t = 0;
 
-	if (!str)
+	if (!string)
 		return;
-	while (str[m] != '\0')
+	while (string[t] != '\0')
 	{
-		_putoutchar(str[m]);
-		m++;
+		putoutchar(string[t]);
+		t++;
 	}
 }
 
@@ -28,16 +28,16 @@ void output(char *str)
  */
 int putoutchar(char y)
 {
-	static int m;
+	static int t;
 	static char buf[W_BUF_SZ];
 
-	if (y == FLUSH_INDICATOR || m >= W_BUF_SZ)
+	if (y == FLUSH_INDICATOR || t >= W_BUF_SZ)
 	{
-		write(2, buf, m);
-		m = 0;
+		write(2, buf, t);
+		t = 0;
 	}
 	if (y != FLUSH_INDICATOR)
-		buf[m++] = y;
+		buf[t++] = y;
 	return (1);
 }
 
@@ -51,35 +51,35 @@ int putoutchar(char y)
  */
 int writechar(char y, int file_desc)
 {
-	static int m;
+	static int t;
 	static char buf[W_BUF_SZ];
 
-	if (y == FLUSH_INDICATOR || m >= W_BUF_SZ)
+	if (y == FLUSH_INDICATOR || t >= W_BUF_SZ)
 	{
-		write(file_desc, buf, m);
-		m = 0;
+		write(file_desc, buf, t);
+		t = 0;
 	}
 	if (y != FLUSH_INDICATOR)
-		buf[m++] = y;
+		buf[t++] = y;
 	return (1);
 }
 
 /**
  * writestr - output char arr of strings
- * @str: user input string
+ * @string: user input string
  * @file_desc: file_desc being written to
  *
  * Return: the number of chars put
  */
-int writestr(char *str, int file_desc)
+int writestr(char *string, int file_desc)
 {
-	int m = 0;
+	int t = 0;
 
-	if (!str)
+	if (!string)
 		return (0);
-	while (*str)
+	while (*string)
 	{
-		m += writechar(*str++, file_desc);
+		t += writechar(*string++, file_desc);
 	}
-	return (m);
+	return (t);
 }

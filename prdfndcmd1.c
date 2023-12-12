@@ -1,58 +1,58 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * histdisp - displays the history list
- * @systeminfo: Structure containing potential arguments.
+ * @d_typeinfo: Structure containing potential arguments.
  *  Return: Always 0
  */
-int histdisp(system *systeminfo)
+int histdisp(d_type *d_typeinfo)
 {
-	putlst(system->hist);
+	putlst(d_typeinfo->hist);
 	return (0);
 }
 
 /**
  * rmaka - removes alias to string
- * @systeminfo: parameter struct
+ * @d_typeinfo: parameter struct
  * @word: the string alias
  *
  * Return:0 on success, 1 on error
  */
-int rmaka(system *systeminfo, char *word)
+int rmaka(d_type *d_typeinfo, char *string)
 {
-	char *s, d;
-	int get;
+	char *p, c;
+	int ret;
 
-	s = str_chr(word, '=');
-	if (!s)
+	p = str_chr(string, '=');
+	if (!p)
 		return (1);
-	d = *s;
-	*s = 0;
-	get = rmnodeindex(&(systeminfo->aka),
-		retrindex(systeminfo->aka, specprefix(systeminfo->aka, word, -1)));
-	*s = d;
-	return (get);
+	c = *p;
+	*p = 0;
+	ret = rmnodeindex(&(d_typeinfo->aka),
+		retrindex(d_typeinfo->aka, specprefix(d_typeinfo->aka, string, -1)));
+	*p = c;
+	return (ret);
 }
 
 /**
  * setaka - sets alias to string
- * @systeminfo: parameter struct
+ * @d_typeinfo: parameter struct
  * @word: the string alias
  *
  * Return: 0 on success, 1 on error
  */
-int setaka(system *systeminfo, char *word)
+int setaka(d_type *d_typeinfo, char *string)
 {
-	char *s;
+	char *p;
 
-	s = str_chr(word, '=');
-	if (!s)
+	p = str_chr(string, '=');
+	if (!p)
 		return (1);
-	if (!*++s)
-		return (rmaka(systeminfo, word));
+	if (!*++p)
+		return (rmaka(d_typeinfo, string));
 
-	rmaka(systeminfo, word);
-	return (putnode_end(&(systeminfo->aka), word, 0) == NULL);
+	rmaka(d_typeinfo, string);
+	return (putnode_end(&(d_typeinfo->aka), string, 0) == NULL);
 }
 
 /**
@@ -61,17 +61,17 @@ int setaka(system *systeminfo, char *word)
  *
  * Return: Always 0 on success, 1 on error
  */
-int printaka(lst_t *nde)
+int printaka(lst_t *node)
 {
-	char *s = NULL, *b = NULL;
+	char *p = NULL, *a = NULL;
 
-	if (nde)
+	if (node)
 	{
-		s = str_chr(nde->wrd, '=');
-		for (b = nde->wrd; b <= s; b++)
-			_putchar(*b);
+		p = str_chr(node->string, '=');
+		for (a = node->string; a <= p; a++)
+			_putchar(*a);
 		_putchar('\'');
-		_puts(s + 1);
+		_puts(p + 1);
 		_puts("'\n");
 		return (0);
 	}
@@ -80,32 +80,32 @@ int printaka(lst_t *nde)
 
 /**
  * createaka - mimics the alias builtin (man alias)
- * @systeminfo: Structure containing potential arguments.
+ * @d_typeinfo: Structure containing potential arguments.
  *  Return: Always 0
  */
-int createaka(system *systeminfo)
+int createaka(d_type *d_typeinfo)
 {
-	int j = 0;
-	char *s = NULL;
-	lst_t *nde = NULL;
+	int i = 0;
+	char *p = NULL;
+	lst_t *node = NULL;
 
-	if (systeminfo->argcstr == 1)
+	if (d_typeinfo->argc_no == 1)
 	{
-		nde = syteminfo->aka;
-		while (nde)
+		node = d_typeinfo->aka;
+		while (node)
 		{
-			printaka(nde);
-			nde = nde->next_node;
+			printaka(node);
+			node = node->next_node;
 		}
 		return (0);
 	}
-	for (j = 1; systeminfo->argvstr[j]; j++)
+	for (i = 1; d_typeinfo->argvstr[i]; i++)
 	{
-		s = str_chr(systeminfo->argvstr[j], '=');
-		if (s)
-			setaka(systeminfo, systeminfo->argvstr[j]);
+		p = str_chr(d_typeinfo->argvstr[i], '=');
+		if (p)
+			setaka(d_typeinfo, d_typeinfo->argvstr[i]);
 		else
-			printaka(specprefix(systeminfo->aka, systeminfo->argvstr[j], '='));
+			printaka(specprefix(d_typeinfo->aka, d_typeinfo->argvstr[i], '='));
 	}
 
 	return (0);

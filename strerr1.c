@@ -1,24 +1,24 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * atoiErr - changes a string to in
- * @k: the string to be converted
+ * @str: the string to be converted
  * Return: 0 success
  *       -1 error
  */
-int atoiErr(char *k)
+int atoiErr(char *str)
 {
-	int v = 0;
+	int k = 0;
 	unsigned long int finding = 0;
 
-	if (*k == '+')
-		k++;
-	for (v = 0;  s[v] != '\0'; v++)
+	if (*str == '+')
+		str++;  /* TODO: why does this make main return 255? */
+	for (k = 0;  str[k] != '\0'; k++)
 	{
-		if (s[v] >= '0' && k[v] <= '9')
+		if (str[k] >= '0' && str[k] <= '9')
 		{
 			finding *= 10;
-			finding += (k[v] - '0');
+			finding += (str[k] - '0');
 			if (finding > INT_MAX)
 				return (-1);
 		}
@@ -30,56 +30,56 @@ int atoiErr(char *k)
 
 /**
  * outputErr - outputs error message
- * @systeminfo: the parameter & return info struct
+ * @d_typeinfo: the parameter & return info struct
  * @imstr: string with err message
  * Return: 0 if no number, converted number or
  *        -1 on error
  */
-void outputErr(system *systeminfo, char *imstr)
+void outputErr(d_type *d_typeinfo, char *imstr)
 {
-	output(systeminfo->filename);
+	output(d_typeinfo->filename);
 	output(": ");
-	print_int(systeminfo->line_tt, STDERR_FILENO);
+	print_int(d_typeinfo->line_tt, STDERR_FILENO);
 	output(": ");
-	output(systeminfo->argvstr[0]);
+	output(d_typeinfo->argvstr[0]);
 	output(": ");
 	output(imstr);
 }
 
 /**
  * print_int - function prints a decimal number
- * @promptmess: the input message
+ * @inputString: the inputString message
  * @file_desc: the filedescriptor to write to
  *
  * Return: no of characters printed
  */
-int print_int(int promptmess, int file_desc)
+int print_int(int inputString, int file_desc)
 {
 	int (*__putchar)(char) = _putchar;
-	int b, counter = 0;
-	unsigned int absval, cur_pos;
+	int k, counter = 0;
+	unsigned int absolute, position;
 
 	if (file_desc == STDERR_FILENO)
 		__putchar = putoutchar;
-	if (promptmess < 0)
+	if (inputString < 0)
 	{
-		absval = -promptmess;
+		absolute = -inputString;
 		__putchar('-');
 		counter++;
 	}
 	else
-		absval = promtmess;
-	cur_pos = absval;
-	for (b = 1000000000; b > 1; b /= 10)
+		absolute = inputString;
+	position = absolute;
+	for (k = 1000000000; k > 1; k /= 10)
 	{
-		if (absval / b)
+		if (absolute / k)
 		{
-			__putchar('0' + cur_pos / b);
+			__putchar('0' + position / k);
 			counter++;
 		}
-		cur_pos %= b;
+		position %= k;
 	}
-	__putchar('0' + cur_pos);
+	__putchar('0' + position);
 	counter++;
 
 	return (counter);
@@ -87,38 +87,38 @@ int print_int(int promptmess, int file_desc)
 
 /**
  * stringify_no- converts a string to int
- * @fig: numb
- * @cntrl: base
- * @checks: argument flags
+ * @no: numb
+ * @base_er: base_er
+ * @checks: argument checks
  *
  * Return: string
  */
-char *stringify_no(long int fig, int cntrl, int checks)
+char *stringify_no(long int no, int base_er, int checks)
 {
-	static char *lst;
-	static char buf[50];
-	char elem = 0;
-	char *shw;
-	unsigned long k = fig;
+	static char *arrptr;
+	static char buff[50];
+	char operation = 0;
+	char *p;
+	unsigned long u = no;
 
-	if (!(checks & UNSIGNED_ENABLED) && fig < 0)
+	if (!(checks & UNSIGNED_ENABLED) && no < 0)
 	{
-		k = -fig;
-		elem = '-';
+		u = -no;
+		operation = '-';
 
 	}
-	lst = checks & LOWERCASE_ENABLED ? "0123456789abcdef" : "0123456789ABCDEF";
-	shw = &buf[49];
-	*shw = '\0';
+	arrptr = checks & LOWERCASE_ENABLED ? "0123456789abcdef" : "0123456789ABCDEF";
+	p = &buff[49];
+	*p = '\0';
 
 	do	{
-		*--shw = lst[k % cntrl];
-		k /= cntrl;
-	} while (k != 0);
+		*--p = arrptr[u % base_er];
+		u /= base_er;
+	} while (u != 0);
 
-	if (elem)
-		*--shw = elem;
-	return (shw);
+	if (operation)
+		*--p = operation;
+	return (p);
 }
 
 /**
@@ -129,12 +129,12 @@ char *stringify_no(long int fig, int cntrl, int checks)
  */
 void strip_comments(char *buf)
 {
-	int p;
+	int k;
 
-	for (p = 0; buf[p] != '\0'; p++)
-		if (buf[p] == '#' && (!p || buf[p - 1] == ' '))
+	for (k = 0; buf[k] != '\0'; k++)
+		if (buf[k] == '#' && (!k || buf[k - 1] == ' '))
 		{
-			buf[p] = '\0';
+			buf[k] = '\0';
 			break;
 		}
 }

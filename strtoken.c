@@ -1,4 +1,4 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * **tkzStr - function to split user input string into arguments
@@ -7,88 +7,88 @@
  * Return: NULL if fail, else ptr to string array
  */
 
-char **tkzStr(char *str, char *dlmt)
+char **tkzStr(char *string, char *dlmt)
 {
-	int x, y, z, j, wordcount = 0;
-	char **i;
+	int j, y, z, n, wordcount = 0;
+	char **t;
 
-	if (str == NULL || str[0] == 0)
+	if (string == NULL || string[0] == 0)
 		return (NULL);
 	if (!dlmt)
 		dlmt = " ";
-	for (x = 0; str[x] != '\0'; x++)
-		if (!delimchar(str[x], d) && (delimchar(str[x + 1], dlmt) || !str[x + 1]))
+	for (j = 0; string[j] != '\0'; j++)
+		if (!delimchar(string[j], dlmt) && (delimchar(string[j + 1], dlmt) || !string[j + 1]))
 			wordcount++;
 
 	if (wordcount == 0)
 		return (NULL);
-	i = malloc((1 + wordcount) * sizeof(char *));
-	if (!i)
+	t = malloc((1 + wordcount) * sizeof(char *));
+	if (!t)
 		return (NULL);
-	for (x = 0, j = 0; y < wordcount; y++)
+	for (j = 0, y = 0; y < wordcount; y++)
 	{
-		while (delimchar(str[x], dlmt))
-			x++;
+		while (delimchar(string[j], dlmt))
+			j++;
 		z = 0;
-		while (!delimchar(str[x + z], dlmt) && str[x + z])
+		while (!delimchar(string[j + z], dlmt) && string[j + z])
 			z++;
-		i[j] = malloc((z + 1) * sizeof(char));
-		if (!i[y])
+		t[y] = malloc((z + 1) * sizeof(char));
+		if (!t[y])
 		{
 			for (z = 0; z < y; z++)
-				free(i[z]);
-			free(i);
+				free(t[z]);
+			free(t);
 			return (NULL);
 		}
-		for (j = 0; j < z; j++)
-			i[y][j] = str[x++];
-		i[y][j] = 0;
+		for (n = 0; n < z; n++)
+			t[y][n] = string[j++];
+		t[y][n] = 0;
 	}
-	i[y] = NULL;
-	return (i);
+	t[y] = NULL;
+	return (t);
 }
 
 /**
  * **tkzStr2 - func that split char array string to args
- * @str: user input in CLI
+ * @string: user input in CLI
  * @dlmt: denote delimiter character
  * Return: NULL if fail, ptr to arr of strings
  */
-char **tkzStr2(char *str, char dlmt)
+char **tkzStr2(char *string, char dlmt)
 {
-	int x, y, z, j, wordcount = 0;
-	char **i;
+	int j, y, z, n, wordcount = 0;
+	char **t;
 
-	if (str == NULL || str[0] == 0)
+	if (string == NULL || string[0] == 0)
 		return (NULL);
-	for (x = 0; str[x] != '\0'; x++)
-		if ((str[x] != dlmt && str[x + 1] == dlmt) ||
-		    (str[x] != dlmt && !str[x + 1]) || str[x + 1] == dlmt)
+	for (j = 0; string[j] != '\0'; j++)
+		if ((string[j] != dlmt && string[j + 1] == dlmt) ||
+		    (string[j] != dlmt && !string[j + 1]) || string[j + 1] == dlmt)
 			wordcount++;
 	if (wordcount == 0)
 		return (NULL);
-	i = malloc((1 + wordcount) * sizeof(char *));
-	if (!i)
+	t = malloc((1 + wordcount) * sizeof(char *));
+	if (!t)
 		return (NULL);
-	for (x = 0, y = 0; y < wordcount; y++)
+	for (j = 0, y = 0; y < wordcount; y++)
 	{
-		while (str[x] == dlmt && str[x] != dlmt)
-			x++;
+		while (string[j] == dlmt && string[j] != dlmt)
+			j++;
 		z = 0;
-		while (str[x + z] != dlmt && str[x + z] && str[x + z] != dlmt)
+		while (string[j + z] != dlmt && string[j + z] && string[j + z] != dlmt)
 			z++;
-		i[j] = malloc((z + 1) * sizeof(char));
-		if (!i[y])
+		t[y] = malloc((z + 1) * sizeof(char));
+		if (!t[y])
 		{
 			for (z = 0; z < y; z++)
-				free(i[z]);
-			free(i);
+				free(t[z]);
+			free(t);
 			return (NULL);
 		}
-		for (j = 0; j < k; j++)
-			i[y][j] = str[x++];
-		i[y][j] = 0;
+		for (n = 0; n < z; n++)
+			t[y][n] = string[j++];
+		t[y][n] = 0;
 	}
-	i[y] = NULL;
-	return (i);
+	t[y] = NULL;
+	return (t);
 }

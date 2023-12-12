@@ -1,33 +1,33 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  **str_n_cpy - makes a copy of a string
- *@trgt: where the string id to be copied to
- *@ori: the original string
- *@num: no of chrs to be copied
+ *@destin: where the string id to be copied to
+ *@srcString: the original string
+ *@no: no of chrs to be copied
  *Return: the concatenated string
  */
-char *str_n_cpy(char *trgt, char *ori, int num)
+char *str_n_cpy(char *destin, char *srcString, int n)
 {
-	int k, l;
-	char *p = trgt;
+	int k, i;
+	char *str = destin;
 
 	k = 0;
-	while (ori[k] != '\0' && k < num - 1)
+	while (srcString[k] != '\0' && k < n - 1)
 	{
-		trgt[k] = ori[k];
+		destin[k] = srcString[k];
 		k++;
 	}
-	if (k < num)
+	if (k < n)
 	{
-		l = k;
-		while (l < num)
+		i = k;
+		while (i < n)
 		{
-			trgt[l] = '\0';
-			l++;
+			destin[i] = '\0';
+			i++;
 		}
 	}
-	return (p);
+	return (str);
 }
 
 /**
@@ -37,36 +37,36 @@ char *str_n_cpy(char *trgt, char *ori, int num)
  *@num: num of bytes used
  *Return: the concatenated string
  */
-char *str_n_cat(char *trgt, char *ori, int num)
+char *str_n_cat(char *destin, char *srcString, int n)
 {
-	int k, l;
-	char *p = trgt;
+	int k, i;
+	char *str = destin;
 
 	k = 0;
-	l = 0;
-	while (trgt[k] != '\0')
+	i = 0;
+	while (destin[k] != '\0')
 		k++;
-	while (ori[l] != '\0' && l < num)
+	while (srcString[i] != '\0' && i < n)
 	{
-		trgt[k] = ori[l];
+		destin[k] = srcString[i];
 		k++;
-		l++;
+		i++;
 	}
-	if (l < num)
-		trgt[k] = '\0';
-	return (p);
+	if (i < n)
+		destin[k] = '\0';
+	return (str);
 }
 
 /**
  **str_chr - finds a char in a string
  *@str: string being checked
  *@cha: char being searched
- *Return: (s) a pointer to the memory area s
+ *Return: (str) a pointer to the memory area str
  */
-char *str_chr(char *str, char cha)
+char *str_chr(char *str, char y)
 {
 	do {
-		if (*str == cha)
+		if (*str == y)
 			return (str);
 	} while (*str++ != '\0');
 

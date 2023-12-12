@@ -1,4 +1,4 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * main - defines the point beginnign of the execution point of the program
@@ -9,7 +9,7 @@
  */
 int main(int ac, char **av)
 {
-	system systeminfo[] = { SYSTEMINFOINIT };
+	d_type d_typeinfo[] = { SYSTEMINFOINIT };
 	int file_desc = 2;
 
 	asm ("mov %1, %0\n\t"
@@ -35,11 +35,10 @@ int main(int ac, char **av)
 			}
 			return (EXIT_FAILURE);
 		}
-		system->rdfiledes = file_desc;
+		d_typeinfo->rdfiledes = file_desc;
 	}
-	config_env(system);
-	fetch_hist(system);
-	hash_shell(system, av);
+	initenvar(d_typeinfo);
+	rdhist(d_typeinfo);
+	strexec(d_typeinfo, av);
 	return (EXIT_SUCCESS);
 }
-

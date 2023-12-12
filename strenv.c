@@ -1,93 +1,93 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * strenv - arr of strings for environ is returned
- * @systeminfo: struct with args, mntn con func prototype
+ * @d_typeinfo: struct with args, mntn con func prototype
  *
  * Return: 0 on execution success
  */
-char **strenv(system *systeminfo)
+char **strenv(d_type *d_typeinfo)
 {
-	if (!systeminfo->environcpy || systeminfo->altered_env)
+	if (!d_typeinfo->environcpy || d_typeinfo->altered_env)
 	{
-		systeminfo->environcpy = list_to_strings(systeminfo->varenv);
-		systeminfo->altered_env = 0;
+		d_typeinfo->environcpy = lsttostr(d_typeinfo->envcpy);
+		d_typeinfo->altered_env = 0;
 	}
 
-	return (systeminfo->environcpy);
+	return (d_typeinfo->environcpy);
 }
 
 /**
- * rmsetenv - env var is eliminated
- * @systeminfo: struct with args, mntn con func prototype
+ * rmsetenv - env varbl is eliminated
+ * @d_typeinfo: struct with args, mntn con func prototype
  *
  *  Return: 1 if rm success, 0 otherwise
  * @varstr: property of env variable string
  */
-int rmsetenv(system *systeminfo, char *varstr)
+int rmsetenv(d_type *d_typeinfo, char *varbl)
 {
-	list_t *ptrnode = systeminfo->varenv;
-	size_t u = 0;
-	char *ptr;
+	lst_t *nodePtr = d_typeinfo->envcpy;
+	size_t i = 0;
+	char *l;
 
-	if (!ptrnode || !varstr)
+	if (!nodePtr || !varbl)
 		return (0);
 
-	while (ptrnode)
+	while (nodePtr)
 	{
-		ptr = str_start(ptrnode->str, varstr);
-		if (ptr && *ptr == '=')
+		l = str_start(nodePtr->string, varbl);
+		if (l && *l == '=')
 		{
-			systeminfo->altered_env = rmnodeindex(&(systeminfo->varenv), u);
-			u = 0;
-			ptrnode = systeminfo->varenv;
+			d_typeinfo->altered_env = rmnodeindex(&(d_typeinfo->envcpy), i);
+			i = 0;
+			nodePtr = d_typeinfo->envcpy;
 			continue;
 		}
-		ptrnode = ptrnode->next_node;
-		u++;
+		nodePtr = nodePtr->next_node;
+		i++;
 	}
-	return (systeminfo->altered_env);
+	return (d_typeinfo->altered_env);
 }
 
 /**
- * setenvset - func to assgn val to new env var
- *             function to manipulate or mod already existing env var
- * @systeminfo: struct with args, mntn con func prototype
- * @varstr: property of the current env var string
- * @ptrval: value of current env var string
+ * setenvset - func to assgn val to new env varbl
+ *             function to manipulate or mod already existing env varbl
+ * @d_typeinfo: struct with args, mntn con func prototype
+ * @varstr: property of the current env varbl string
+ * @ptrval: val of current env varbl string
  *
  *  Return: 0 on code execution success
  */
-int setenvset(system *systeminfo, char *varstr, char *ptrval)
+int setenvset(d_type *d_typeinfo, char *varbl, char *val)
 {
 	char *buf = NULL;
-	list_t *ptrnode;
-	char *ptr;
+	lst_t *nodePtr;
+	char *l;
 
-	if (!varstr || !ptrval)
+	if (!varbl || !val)
 		return (0);
 
-	buf = malloc(str_len(varstr) + str_len(ptrval) + 2);
+	buf = malloc(str_len(varbl) + str_len(val) + 2);
 	if (!buf)
 		return (1);
-	str_cpy(buf, varstr);
+	str_cpy(buf, varbl);
 	str_cat(buf, "=");
-	str_cat(buf, ptrval);
-	ptrnode = systeminfo->varenv;
-	while (ptrnode)
+	str_cat(buf, val);
+	nodePtr = d_typeinfo->envcpy;
+	while (nodePtr)
 	{
-		ptr = str_start(ptrnode->str, varstr);
-		if (ptr && *ptr == '=')
+		l = str_start(nodePtr->string, varbl);
+		if (l && *l == '=')
 		{
-			free(ptrnode->str);
-			ptrnode->str = buf;
-			systeminfo->altered_env = 1;
+			free(nodePtr->string);
+			nodePtr->string = buf;
+			d_typeinfo->altered_env = 1;
 			return (0);
 		}
-		ptrnode = ptrnode->next_node;
+		nodePtr = nodePtr->next_node;
 	}
-	putnode_end(&(systeminfo->varenv), buf, 0);
+	putnode_end(&(d_typeinfo->envcpy), buf, 0);
 	free(buf);
-	systeminfo->altered_env = 1;
+	d_typeinfo->altered_env = 1;
 	return (0);
 }

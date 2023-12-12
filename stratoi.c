@@ -1,26 +1,25 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * modsys - return 1 for interactive mode of shell
- * @systeminfo: &ofstruct
+ * @d_typeinfo: &ofstruct
  *
  * Return: 1 if shell is interactive(sysallowmdfctn) 0 for else
  */
-int modsys(system *systeminfo)
+int modsys(d_type *d_typeinfo)
 {
-	return (isatty(STDIN_FILENO) && systeminfo->rdfiledes <= 2);
+	return (isatty(STDIN_FILENO) && d_typeinfo->rdfiledes <= 2);
 }
 
-/**
- * delimchar - function to identify delimiter character in a string
+/* delim - function to identify delimiter character in a string
  * @z: char to be checked whether or not delimiter
  * @delimiter: delimiter char taken as string
  * Return: if true, comp returns 1, and 0 for false
  */
-int delimchar(char z, char *delimiter)
+int delimchar(char c, char *delim)
 {
-	while (*delimiter)
-		if (*delimiter++ == z)
+	while (*delim)
+		if (*delim++ == c)
 			return (1);
 	return (0);
 }
@@ -31,9 +30,9 @@ int delimchar(char z, char *delimiter)
  *Return: 0 if char not alphabet, 1 if alphabet char is found
  */
 
-int alphachar(int z)
+int alphachar(int c)
 {
-	if ((z >= 'a' && z <= 'z') || (z >= 'A' && z <= 'Z'))
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		return (1);
 	else
 		return (0);
@@ -45,30 +44,30 @@ int alphachar(int z)
  *Return: 0 if no numbers in string, converted number otherwise
  */
 
-int strint(char *atoistr)
+int strtint(char *s)
 {
-	int k, oprtr = 1, flgint = 0, printout;
-	unsigned int foundval = 0;
+	int i, sign = 1, flag = 0, output;
+	unsigned int result = 0;
 
-	for (k = 0;  atoistr[k] != '\0' && flgint != 2; k++)
+	for (i = 0;  s[i] != '\0' && flag != 2; i++)
 	{
-		if (atoistr[k] == '-')
-			oprtr *= -1;
+		if (s[i] == '-')
+			sign *= -1;
 
-		if (atoistr[k] >= '0' && atoistr[k] <= '9')
+		if (s[i] >= '0' && s[i] <= '9')
 		{
-			flgint = 1;
-			foundval *= 10;
-			foundval += (atoistr[k] - '0');
+			flag = 1;
+			result *= 10;
+			result += (s[i] - '0');
 		}
-		else if (flgint == 1)
-			flgint = 2;
+		else if (flag == 1)
+			flag = 2;
 	}
 
-	if (oprtr == -1)
-		printout = -foundval;
+	if (sign == -1)
+		output = -result;
 	else
-		printout = foundval;
+		output = result;
 
-	return (printout);
+	return (output);
 }

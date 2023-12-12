@@ -1,14 +1,13 @@
-#include "dupshell.h"
-
+#include "shell.h"
 /**
  * check_opp - checks if current char is a chain delimeter
- * @systeminfo: the parameter struct
+ * @d_typeinfo: the parameter struct
  * @buf: char buffer
  * @s: address of current position in buf
  *
  * Return: 1 if chain delimeter, 0 otherwise
  */
-int check_opp(system *systeminfo, char *buf, size_t *s)
+int check_opp(d_type *d_typeinfo, char *buf, size_t *s)
 {
 	size_t k = *s;
 
@@ -16,18 +15,18 @@ int check_opp(system *systeminfo, char *buf, size_t *s)
 	{
 		buf[k] = 0;
 		k++;
-		systeminfo->buf_operation = OR;
+		d_typeinfo->buf_operation = OR;
 	}
 	else if (buf[k] == '&' && buf[k + 1] == '&')
 	{
 		buf[k] = 0;
 		k++;
-		systeminfo->buf_operation = AND;
+		d_typeinfo->buf_operation = AND;
 	}
-	else if (buf[k] == ';')
+	else if (buf[k] == ';') /* found end of this command */
 	{
-		buf[k] = 0;
-		systeminfo->buf_operation = CHAIN;
+		buf[k] = 0; /* replace semicolon with null */
+		d_typeinfo->buf_operation = CHAIN;
 	}
 	else
 		return (0);
@@ -37,7 +36,7 @@ int check_opp(system *systeminfo, char *buf, size_t *s)
 
 /**
  * chainproc - countinues the chain depending on the last status
- * @systeminfo: struct parameter
+ * @d_typeinfo: struct parameter
  * @buf: buffer char
  * @s: info on the current position in buf
  * @j: starting position in buf
@@ -45,21 +44,21 @@ int check_opp(system *systeminfo, char *buf, size_t *s)
  *
  * Return: Void
  */
-void chainproc(system *systeminfo, char *buf, size_t *s, size_t j, size_t sz)
+void chainproc(d_type *d_typeinfo, char *buf, size_t *s, size_t j, size_t sz)
 {
 	size_t k = *s;
 
-	if (systeminfo->buf_operation == AND)
+	if (d_typeinfo->buf_operation == AND)
 	{
-		if (systeminfo->status)
+		if (d_typeinfo->status)
 		{
 			buf[j] = 0;
 			k = sz;
 		}
 	}
-	if (systeminfo->buf_operation == OR)
+	if (d_typeinfo->buf_operation == OR)
 	{
-		if (!systeminfo->status)
+		if (!d_typeinfo->status)
 		{
 			buf[j] = 0;
 			k = sz;
@@ -70,12 +69,12 @@ void chainproc(system *systeminfo, char *buf, size_t *s, size_t j, size_t sz)
 }
 
 /**
- * aka_sub - replaces aliases in the tokenized string
- * @systeminfo: the parameter struct
+ * akasub - replaces aliases in the tokenized string
+ * @d_typeinfo: the parameter struct
  *
  * Return: 1 replaced, 0 otherwise
  */
-int aka_sub(system *systeminfo)
+int akasub(d_type *d_typeinfo)
 {
 	int j;
 	lst_t *nde;
@@ -83,57 +82,57 @@ int aka_sub(system *systeminfo)
 
 	for (j = 0; j < 10; j++)
 	{
-		nde = specprefix(systeminfo->aka, systeminfo->argvstr[0], '=');
+		nde = specprefix(d_typeinfo->aka, d_typeinfo->argvstr[0], '=');
 		if (!nde)
 			return (0);
-		free(systeminfo->argvstr[0]);
-		p = str_chr(nde->wrd, '=');
+		free(d_typeinfo->argvstr[0]);
+		s = str_chr(nde->string, '=');
 		if (!s)
 			return (0);
-		p = str_dup(s + 1);
+		s = str_dup(s + 1);
 		if (!s)
 			return (0);
-		systeminfo->argvstr[0] = s;
+		d_typeinfo->argvstr[0] = s;
 	}
 	return (1);
 }
 
 /**
  * varsub - substitutes vars in the tokenized string
- * @systeminfo: the parameter struct
+ * @d_typeinfo: the parameter struct
  *
  * Return: 1 replaced, 0 otherwise
  */
-int varsub(system *systeminfo)
+int varsub(d_type *d_typeinfo)
 {
 	int j = 0;
 	lst_t *nde;
 
-	for (j = 0; systeminfo->argvstr[j]; j++)
+	for (j = 0; d_typeinfo->argvstr[j]; j++)
 	{
-		if (systeminfo->argvstr[j][0] != '$' || !systeminfo->argvstr[j][1])
+		if (d_typeinfo->argvstr[j][0] != '$' || !d_typeinfo->argvstr[j][1])
 			continue;
 
-		if (!str_cmp(systeminfo->argvstr[j], "$?"))
+		if (!str_cmp(d_typeinfo->argvstr[j], "$?"))
 		{
-			strsub(&(systeminfo->argvstr[j]),
-				str_dup(stringify_no(systeminfo->status, 10, 0)));
+			strsub(&(d_typeinfo->argvstr[j]),
+				str_dup(stringify_no(d_typeinfo->status, 10, 0)));
 			continue;
 		}
-		if (!str_cmp(systeminfo->argvstr[j], "$$"))
+		if (!str_cmp(d_typeinfo->argvstr[j], "$$"))
 		{
-			strsub(&(systeminfo->argvstr[j]),
+			strsub(&(d_typeinfo->argvstr[j]),
 				str_dup(stringify_no(getpid(), 10, 0)));
 			continue;
 		}
-		nde = specprefix(systeminfo->envcpy, &systeminfo->argvstr[j][1], '=');
+		nde = specprefix(d_typeinfo->envcpy, &d_typeinfo->argvstr[j][1], '=');
 		if (nde)
 		{
-			strsub(&(systeminfo->argvstr[j]),
-				str_dup(str_chr(nde->wrd, '=') + 1));
+			strsub(&(d_typeinfo->argvstr[j]),
+				str_dup(str_chr(nde->string, '=') + 1));
 			continue;
 		}
-		strsub(&systeminfo->argvstr[j], str_dup(""));
+		strsub(&d_typeinfo->argvstr[j], str_dup(""));
 
 	}
 	return (0);
@@ -141,8 +140,8 @@ int varsub(system *systeminfo)
 
 /**
  * strsub - replaces string
- * @prev: address of old string
- * @next: new string
+ * @prev: address of prev string
+ * @next: next string
  *
  * Return: 1 if replaced, 0 otherwise
  */

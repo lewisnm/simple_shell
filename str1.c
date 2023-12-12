@@ -2,85 +2,85 @@
 
 /**
  * str_cpy - copies a string
- * @loc: the destination
- * @orgn: the source
+ * @ptrbufdest: the destination
+ * @ptrbufsrc: the source
  *
- * Return: pointer to dest
+ * Return: pointer to ptrbufdest
  */
-char *str_cpy(char *loc, char *orgn)
+char *str_cpy(char *ptrbufdest, char *ptrbufsrc)
 {
-	int f = 0;
+	int j = 0;
 
-	if (loc == orgn || orgn == 0)
-		return (orgn);
-	while (orgn[f])
+	if (ptrbufdest == ptrbufsrc || ptrbufsrc == 0)
+		return (ptrbufdest);
+	while (ptrbufsrc[j])
 	{
-		loc[f] = orgn[f];
-		f++;
+		ptrbufdest[j] = ptrbufsrc[j];
+		j++;
 	}
-	loc[f] = 0;
-	return (loc);
+	ptrbufdest[j] = 0;
+	return (ptrbufdest);
 }
 
 /**
  * str_dup - duplicates a string
- * @ogStr: str to duplicate
+ * @string: str to duplicate
  *
  * Return: ptr to the duplicated string
  */
-char *str_dup(const char *ogStr)
+char *str_dup(const char *string)
 {
-	int girth = 0;
-	char *get;
+	int len = 0;
+	char *ptrRet;
 
-	if (ogStr == NULL)
+	if (string == NULL)
 		return (NULL);
-	while (*ogStr++)
-		girth++;
-	get = malloc(sizeof(char) * (girth + 1));
-	if (!get)
+	while (*string++)
+		len++;
+	ptrRet = malloc(sizeof(char) * (len + 1));
+	if (!ptrRet)
 		return (NULL);
-	for (girth++; girth--;)
-		get[girth] = *--ogStr;
-	return (get);
+	for (len++; len--;)
+		ptrRet[len] = *--string;
+	return (ptrRet);
 }
 
 /**
  *_puts - prints an input string
- *@wrd: the string to be printed
+ *@string: the string to be printed
  *
  * Return: void
  */
-void _puts(char *wrd)
+void _puts(char *string)
 {
 	int j = 0;
 
-	if (!wrd)
+	if (!string)
 		return;
-	while (wrd[j] != '\0')
+	while (string[j] != '\0')
 	{
-		_putchar(wrd[j]);
+		_putchar(string[j]);
 		j++;
 	}
 }
 
 /**
- * _putchar - writes the character c to stdout
+ * _putchar - writes the character s to stdout
  * @ch: The character to print
  *
  * Return: On success 1 or -1 for an error
  */
-int _putchar(char ch)
+int _putchar(char s)
 {
 	static int j;
 	static char buf[W_BUF_SZ];
 
-	if (ch == FLASH_INDICATOR || J >= W_BUF_SZ)
+	if (s == FLUSH_INDICATOR || j >= W_BUF_SZ)
 	{
 		write(1, buf, j);
 		j = 0;
 	}
-	if (ch != FLASH_INDICATOR)
-		buf[j++] = ch;
+	if (s != FLUSH_INDICATOR)
+		buf[j++] = s;
 	return (1);
 }

@@ -1,5 +1,4 @@
-#include "dupshell.h"
-
+#include "shell.h"
 
 /**
  * clearmem - frees a pointer and NULLs the address

@@ -1,92 +1,92 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * managenv - prints the current environment
- * @systeminfo: struct potentially with args;
- *          maintains const func prototype
- * Return: 0 on code execution success
+ * @d_typeinfo: Structure containing potential arguments. Used to maintain
+ *          constant function prototype.
+ * Return: Always 0
  */
-int managenv(system *systeminfo)
+int managenv(d_type *d_typeinfo)
 {
-	printstrlst(systeminfo->envcpy);
+	printstrlst(d_typeinfo->envcpy);
 	return (0);
 }
 
 /**
- * retrienv - fetch corresponding val of env var given
- * @systeminfo: struct potentially with args
- * @ptrenv: name of envt vrbl provided
+ * retrienv - gets the val of an environ variable
+ * @d_typeinfo: Structure containing potential arguments. Used to maintain
+ * @name: env varbl name
  *
- * Return: the value
+ * Return: the val
  */
-char *retrienv(system *systeminfo, const char *ptrenv)
+char *retrienv(d_type *d_typeinfo, const char *name)
 {
-	list_t *ptrnode = systeminfo->envcpy;
-	char *y;
+	lst_t *node = d_typeinfo->envcpy;
+	char *p;
 
-	while (ptrnode)
+	while (node)
 	{
-		y = starts_with(ptrnode->str, ptrenv);
-		if (y && *y)
-			return (y);
-		ptrnode = ptrnode->next_node;
+		p = str_start(node->string, name);
+		if (p && *p)
+			return (p);
+		node = node->next_node;
 	}
 	return (NULL);
 }
 
 /**
- * modsetenv - give val of corresponding provided env var
- *             manipulate or modify the current env var
- * @systeminfo: struct with possible args
- *        maintains const func prototype
- *  Return: 0 on code execution success
+ * modsetenv - Initialize a new environment variable,
+ *             or modify an existing one
+ * @d_typeinfo: Structure containing potential arguments. Used to maintain
+ *        constant function prototype.
+ *  Return: Always 0
  */
-int modsetenv(system *systeminfo)
+int modsetenv(d_type *d_typeinfo)
 {
-	if (systeminfo->argc_no != 3)
+	if (d_typeinfo->argc_no != 3)
 	{
-		output("Incorrect arg count\n");
+		output("Incorrect number of arguements\n");
 		return (1);
 	}
-	if (setenvset(systeminfo, systeminfo->argvstr[1], systeminfo->argvstr[2]))
+	if (setenvset(d_typeinfo, d_typeinfo->argvstr[1], d_typeinfo->argvstr[2]))
 		return (0);
 	return (1);
 }
 
 /**
- * unsetenvrm - eradicate env var
- * @systeminfo: struct potentially with args
- *        mntn const func prototype
- *  Return: 0 on code success
+ * unsetenvrm - Remove an environment variable
+ * @d_typeinfo: Structure containing potential arguments. Used to maintain
+ *        constant function prototype.
+ *  Return: Always 0
  */
-int unsetenvrm(system *systeminfo)
+int unsetenvrm(d_type *d_typeinfo)
 {
-	int t;
+	int i;
 
-	if (systeminfo->argc_no == 1)
+	if (d_typeinfo->argc_no == 1)
 	{
-		output("Very few arg count\n");
+		output("Too few arguements.\n");
 		return (1);
 	}
-	for (t = 1; t <= systeminfo->argc_no; t++)
-		rmsetenv(systeminfo, systeminfo->argvstr[t]);
+	for (i = 1; i <= d_typeinfo->argc_no; i++)
+		rmsetenv(d_typeinfo, d_typeinfo->argvstr[i]);
 
 	return (0);
 }
 
 /**
- * initenvar - initializes linked list
- * @systeminfo: struct with  potential args Used to maintain
- *          mntn cnstnt func prototype
- * Return: 0 on code execution success
+ * initenvar - populates env linked list
+ * @d_typeinfo: Structure containing potential arguments. Used to maintain
+ *          constant function prototype.
+ * Return: Always 0
  */
-int initenvar(system *systeminfo)
+int initenvar(d_type *d_typeinfo)
 {
-	list_t *ptrnode = NULL;
-	size_t t;
+	lst_t *node = NULL;
+	size_t i;
 
-	for (t = 0; environcpy[t]; t++)
-		putnode_end(&ptrnode, environcpy[t], 0);
-	systeminfo->envcpy = ptrnode;
+	for (i = 0; environ[i]; i++)
+		putnode_end(&node, environ[i], 0);
+	d_typeinfo->envcpy = node;
 	return (0);
 }

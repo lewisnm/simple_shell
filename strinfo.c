@@ -1,74 +1,73 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
- * resetinfo - denotes struct named system
- * @systeminfo: & of struct; hexadecimal val
+ * resetinfo - initializes d_type struct
+ * @d_typeinfo: struct address
  */
-void resetinfo(system *systeminfo)
+void resetinfo(d_type *d_typeinfo)
 {
-	systeminfo->argstr = NULL;
-	systeminfo->argvstr = NULL;
-	systeminfo->path = NULL;
-	systeminfo->argc_no = 0;
+	d_typeinfo->argstr = NULL;
+	d_typeinfo->argvstr = NULL;
+	d_typeinfo->path = NULL;
+	d_typeinfo->argc_no = 0;
 }
 
 /**
- * settinginfo - denotes system struct
- * @systeminfo: &of struct
- * @av: av, denotes arg vector
+ * resetinfo - denotes struct named system
+ * @d_typeinfo: & of struct; hexadecimal val
  */
-void settinginfo(system *systeminfo, char **av)
+void settinginfo(d_type *d_typeinfo, char **av)
 {
-	int t = 0;
+	int j = 0;
 
-	systeminfo->fname = av[0];
-	if (systeminfo->argstr)
+	d_typeinfo->filename = av[0];
+	if (d_typeinfo->argstr)
 	{
-		systeminfo->argvstr = tkzStr(systeminfo->argstr, " \t");
-		if (!systeminfo->argvstr)
+		d_typeinfo->argvstr = tkzStr(d_typeinfo->argstr, " \t");
+		if (!d_typeinfo->argvstr)
 		{
 
-			systeminfo->argvstr = malloc(sizeof(char *) * 2);
-			if (systeminfo->argvstr)
+			d_typeinfo->argvstr = malloc(sizeof(char *) * 2);
+			if (d_typeinfo->argvstr)
 			{
-				systeminfo->argvstr[0] = str_dup(systeminfo->argstr);
-				systeminfo->argvstr[1] = NULL;
+				d_typeinfo->argvstr[0] = str_dup(d_typeinfo->argstr);
+				d_typeinfo->argvstr[1] = NULL;
 			}
 		}
-		for (t = 0; systeminfo->argvstr && systeminfo->argvstr[t]; t++)
+		for (j = 0; d_typeinfo->argvstr && d_typeinfo->argvstr[j]; j++)
 			;
-		systeminfo->argc_no = t;
+		d_typeinfo->argc_no = j;
 
-		akasub(systeminfo);
-		varsub(systeminfo);
+		akasub(d_typeinfo);
+		varsub(d_typeinfo);
 	}
 }
 
 /**
  * memfrinfo - system struct freed in fields
- * @systeminfo: &of struct
- * @total: checks if freeing all fields
+ * @d_typeinfo: &of struct
+ * @total: checks if freeing total fields
  */
-void memfrinfo(system *systeminfo, int total)
+void memfrinfo(d_type *d_typeinfo, int total)
 {
-	freemem(systeminfo->argvstr);
-	systeminfo->argvstr = NULL;
-	systeminfo->path = NULL;
+	freemem(d_typeinfo->argvstr);
+	d_typeinfo->argvstr = NULL;
+	d_typeinfo->path = NULL;
 	if (total)
 	{
-		if (!systeminfo->buf_cmd)
-			free(systeminfo->argstr);
-		if (systeminfo->envcpy)
-			memlist(&(systeminfo->envcpy));
-		if (systeminfo->hist)
-			memfree(&(systeminfo->hist));
-		if (systeminfo->alias)
-			memfree(&(systeminfo->alias));
-		freemem(systeminfo->environcpy);
-			systeminfo->environcpy = NULL;
-		clearmem((void **)systeminfo->cmd_buf);
-		if (systeminfo->rdfiledes > 2)
-			close(systeminfo->rdfiledes);
+		if (!d_typeinfo->buf_cmd)
+			free(d_typeinfo->argstr);
+		if (d_typeinfo->envcpy)
+			memfree(&(d_typeinfo->envcpy));
+		if (d_typeinfo->hist)
+			memfree(&(d_typeinfo->hist));
+		if (d_typeinfo->aka)
+			memfree(&(d_typeinfo->aka));
+		freemem(d_typeinfo->environcpy);
+			d_typeinfo->environcpy = NULL;
+		clearmem((void **)d_typeinfo->buf_cmd);
+		if (d_typeinfo->rdfiledes > 2)
+			close(d_typeinfo->rdfiledes);
 		_putchar(FLUSH_INDICATOR);
 	}
 }

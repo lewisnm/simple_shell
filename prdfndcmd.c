@@ -1,97 +1,97 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * exitbin - this function indicates the exit of the custom shell
- * @systeminfo: struct potentially with args
+ * @d_typeinfo: struct potentially with args
  *          maintains constnt func prototype
  *
- *  Return: exits with 0 if systeminfo.argvstr[0] is != to exit
+ *  Return: exits with 0 if d_typeinfo.argvstr[0] is != to exit
  */
-int exitbin(system *systeminfo)
+int exitbin(d_type *d_typeinfo)
 {
-	int term_proc;
+	int exitcheck;
 
-	if (systeminfo->argvstr[1])
+	if (d_typeinfo->argvstr[1])  /* If there is an exit arguement */
 	{
-		term_proc = atoiErr(systeminfo->argvstr[1]);
-		if (term_proc == -1)
+		exitcheck = atoiErr(d_typeinfo->argvstr[1]);
+		if (exitcheck == -1)
 		{
-			systeminfo->status = 2;
-			outputErr(systeminfo, "Illegal number: ");
-			output(systeminfo->argvstr[1]);
+			d_typeinfo->status = 2;
+			outputErr(d_typeinfo, "Illegal number: ");
+			output(d_typeinfo->argvstr[1]);
 			putoutchar('\n');
 			return (1);
 		}
-		systeminfo->error_o = atoiErr(systeminfo->argvstr[1]);
+		d_typeinfo->error_no = atoiErr(d_typeinfo->argvstr[1]);
 		return (-2);
 	}
-	systeminfo->error_no = -1;
+	d_typeinfo->error_no = -1;
 	return (-2);
 }
 
 /**
  * cdbin - function that alters current directory
- * @systeminfo: struct that potentially has args
+ * @d_typeinfo: struct that potentially has args
  *          maintain constnt func prototype
  *  Return: 0 on code execution success
  */
-int cdbin(system *systeminfo)
+int cdbin(d_type *d_typeinfo)
 {
-	char *sptr, *ptrdirctry, bufmem[1024];
-	int drctry;
+	char *s, *dir, buffer[1024];
+	int chdir_ret;
 
-	sptr = cwd_altr(bufmem, 1024);
-	if (!sptr)
-		_puts("TODO: >>cwd_alter failure emsg here<<\n");
-	if (!systeminfo->argvstr[1])
+	s = getcwd(buffer, 1024);
+	if (!s)
+		_puts("TODO: >>getcwd failure emsg here<<\n");
+	if (!d_typeinfo->argvstr[1])
 	{
-		ptrdirctry = retrienv(systeminfo, "HOME=");
-		if (!ptrdirctry)
-			drctry = /* TODO: what it will be */
-				drctrych((ptrdirctry = retrienv(systeminfo, "PWD=")) ? ptrdirctry : "/");
+		dir = retrienv(d_typeinfo, "HOME=");
+		if (!dir)
+			chdir_ret = /* TODO: what should this be? */
+				chdir((dir = retrienv(d_typeinfo, "PWD=")) ? dir : "/");
 		else
-			drctry = drctrych(ptrdirctry);
+			chdir_ret = chdir(dir);
 	}
-	else if (str_cmp(systeminfo->argvstr[1], "-") == 0)
+	else if (str_cmp(d_typeinfo->argvstr[1], "-") == 0)
 	{
-		if (!retrienv(systeminfo, "OLDPWD="))
+		if (!retrienv(d_typeinfo, "OLDPWD="))
 		{
-			_puts(sptr);
+			_puts(s);
 			_putchar('\n');
 			return (1);
 		}
-		_puts(retrienv(systeminfo, "OLDPWD=")), _putchar('\n');
-		drctry = /* TODO: what should this be? */
-			drctrych((ptrdirctry = retrienv(systeminfo, "OLDPWD=")) ? ptrdirctry : "/");
+		_puts(retrienv(d_typeinfo, "OLDPWD=")), _putchar('\n');
+		chdir_ret = /* TODO: what should this be? */
+			chdir((dir = retrienv(d_typeinfo, "OLDPWD=")) ? dir : "/");
 	}
 	else
-		drctry = drctrych(systeminfo->argvstr[1]);
-	if (drctry == -1)
+		chdir_ret = chdir(d_typeinfo->argvstr[1]);
+	if (chdir_ret == -1)
 	{
-		outputErr(systeminfo, "can't cd to ");
-		output(systeminfo->argvstr[1]), putoutchar('\n');
+		outputErr(d_typeinfo, "can't cd to ");
+		output(d_typeinfo->argvstr[1]), putoutchar('\n');
 	}
 	else
 	{
-		setenvset(systeminfo, "OLDPWD", retrienv(systeminfo, "PWD="));
-		setenvset(systeminfo, "PWD", cwd_alter(bufmem, 1024));
+		setenvset(d_typeinfo, "OLDPWD", retrienv(d_typeinfo, "PWD="));
+		setenvset(d_typeinfo, "PWD", getcwd(buffer, 1024));
 	}
 	return (0);
 }
 
 /**
  * helpbin - function that alters current directory
- * @systeminfo: struct that potentially has args
+ * @d_typeinfo: struct that potentially has args
  *          maintain cnstnt func prototype
  *  Return: 0 on code execution success
  */
-int helpbin(system *systeminfo)
+int helpbin(d_type *d_typeinfo)
 {
-	char **strarr;
+	char **arg_array;
 
-	strarr = systeminfo->argvstr;
+	arg_array = d_typeinfo->argvstr;
 	_puts("help call works. Function not yet implemented \n");
 	if (0)
-		_puts(*strarr);
+		_puts(*arg_array); /* temp att_unused workaround */
 	return (0);
 }

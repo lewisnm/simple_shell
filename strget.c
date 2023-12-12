@@ -1,158 +1,159 @@
-#include "dupshell.h"
+#include "shell.h"
 
 /**
  * putbuf - chained commands in buff
- * @systeminfo: param struct
+ * @d_typeinfo: param struct
  * @buf: address of buffer
- * @size: address of var size
+ * @size: address of varbl size
  *
  * Return: bytes read
  */
-ssize_t putbuf(system *systeminfo, char **buf, size_t *size)
+ssize_t input_buf(d_type *d_typeinfo, char **buf, size_t *size)
 {
-	ssize_t l = 0;
-	size_t size_p = 0;
+	ssize_t s = 0;
+	size_t lenVar = 0;
 
-	if (!*size)
+	if (!*size) /* if nothing left in the buffer, fill it */
 	{
-		/*bfree((void **)info->cmd_buf);*/
+		/*clearmem((void **)d_typeinfo->cmd_buf);*/
 		free(*buf);
 		*buf = NULL;
-		signal(SIGINT, handleSigint);
-#if ENABLE_GETLINE
-		l = getline(buf, &size_p, stdin);
+		signal(SIGINT, sigintHandler);
+#if ENABLEcustGetLine
+		s = getline(buf, &lenVar, stdin);
 #else
-		l = custGetline(info, buf, &size_p);
+		s = custGetLine(d_typeinfo, buf, &lenVar);
 #endif
-		if (l > 0)
+		if (s > 0)
 		{
-			if ((*buf)[l - 1] == '\n')
+			if ((*buf)[s - 1] == '\n')
 			{
-				(*buf)[l - 1] = '\0'; /* remove trailing newline */
-				l--;
+				(*buf)[s - 1] = '\0'; /* remove trailing newline */
+				s--;
 			}
-			systeminfo->counter_line = 1;
-			strip_comment(*buf);
-			conhistlist(systeminfo, *buf, systeminfo->numhist++);
+			d_typeinfo->counter_line = 1;
+			strip_comments(*buf);
+			conhistlist(d_typeinfo, *buf, d_typeinfo->numhist++);
+			/* if (str_chr(*buf, ';')) is this a command chain? */
 			{
-				*size = l;
-				systeminfo->buf_cmd = buf;
+				*size = s;
+				d_typeinfo->buf_cmd = buf;
 			}
 		}
 	}
-	return (l);
-}
-
-/**
- * getSysInput - gets a line without the newline char
- * @systeminfo: parameter struct
- *
- * Return: bytes read
- */
-ssize_t getSysInput(system *systeminfo)
-{
-	static char *buf; /* the ';' command chain buffer */
-	static size_t a, k, size;
-	ssize_t s = 0;
-	char **sto_p = &(systeminfo->argstr), *z;
-
-	_putchar(FLASH_INDICATOR);
-	s = putbuf(systeminfo, &buf, &size);
-	if (s == -1) /* EOF */
-		return (-1);
-	if (size)
-	{
-		k = a;
-		z = buf + a;
-
-		chainproc(systeminfo, buf, &k, a, size);
-		while (k < size)
-		{
-			if (chain_opp(systeminfo, buf, &k))
-				break;
-			k++;
-		}
-
-		a = k + 1;
-		if (a >= size)
-		{
-			a = size = 0;
-			systeminfo->buf_operation = NORM;
-		}
-
-		*sto_p = z;
-		return (str_len(z));
-	}
-
-	*sto_p = buf;
 	return (s);
 }
 
 /**
+ * getSysInput - gets a line without the newline char
+ * @d_typeinfo: parameter struct
+ *
+ * Return: bytes read
+ */
+ssize_t getSysInput(d_type *d_typeinfo)
+{
+	static char *buf; /* the ';' command chain buffer */
+	static size_t j, i, size;
+	ssize_t s = 0;
+	char **buf_p = &(d_typeinfo->argstr), *ptrP;
+
+	_putchar(FLUSH_INDICATOR);
+	s = input_buf(d_typeinfo, &buf, &size);
+	if (s == -1) /* EOF */
+		return (-1);
+	if (size)	/* we have commands left in the chain buffer */
+	{
+		i = j; /* init new iterator to current buf position */
+		ptrP = buf + j; /* get pointer for return */
+
+		chainproc(d_typeinfo, buf, &i, j, size);
+		while (i < size) /* iterate to semicolon or end */
+		{
+			if (check_opp(d_typeinfo, buf, &i))
+				break;
+			i++;
+		}
+
+		j = i + 1; /* increment past nulled ';'' */
+		if (j >= size) /* reached end of buffer? */
+		{
+			j = size = 0; /* reset position and length */
+			d_typeinfo->buf_operation = NORM;
+		}
+
+		*buf_p = ptrP; /* pass back pointer to current command position */
+		return (str_len(ptrP)); /* return length of current command */
+	}
+
+	*buf_p = buf; /* else not a chain, pass back buffer from custGetLine() */
+	return (s); /* return length of buffer from custGetLine() */
+}
+
+/**
  * wade_buf - reads a buffer
- * @systeminfo: parameter struct
+ * @d_typeinfo: parameter struct
  * @buf: buffer
  * @q: size
  *
  * Return: w
  */
-ssize_t wade_buf(system *systeminfo, char *buf, size_t *q)
+ssize_t read_buf(d_type *d_typeinfo, char *buf, size_t *j)
 {
-	ssize_t w = 0;
+	ssize_t s = 0;
 
-	if (*q)
+	if (*j)
 		return (0);
-	w = read(systeminfo->rdfiledes, buf, R_BUF_SZ);
-	if (w >= 0)
-		*q = w;
-	return (w);
+	s = read(d_typeinfo->rdfiledes, buf, R_BUF_SZ);
+	if (s >= 0)
+		*j = s;
+	return (s);
 }
 
 /**
  * custGetLine - gets the next line of input from STDIN
- * @systeminfo: parameter struct
+ * @d_typeinfo: parameter struct
  * @str: address of pointer to buffer, preallocated or NULL
  * @girth: size of preallocated ptr buffer if not NULL
  *
  * Return: t
  */
-int custGetLine(system *systeminfo, char **str, size_t *girth)
+int custGetLine(d_type *d_typeinfo, char **ptr, size_t *length)
 {
 	static char buf[R_BUF_SZ];
-	static size_t j, gir;
-	size_t m;
-	ssize_t z = 0, t = 0;
-	char *o = NULL, *brand_p = NULL, *d;
+	static size_t j, size;
+	size_t n;
+	ssize_t s = 0, m = 0;
+	char *ptrP = NULL, *newBlock = NULL, *ptrC;
 
-	o = *str;
-	if (o && girth)
-		t = *girth;
-	if (j == gir)
-		j = gir = 0;
+	ptrP = *ptr;
+	if (ptrP && length)
+		m = *length;
+	if (j == size)
+		j = size = 0;
 
-	z = wade_buf(systeminfo, buf, &gir);
-	if (z == -1 || (z == 0 && gir == 0))
+	s = read_buf(d_typeinfo, buf, &size);
+	if (s == -1 || (s == 0 && size == 0))
 		return (-1);
 
-	c = str_chr(buf + i, '\n');
-	m = d ? 1 + (unsigned int)(d - buf) : gir;
-	brand_p = reallocmem(o, t, t ? t + m : m + 1);
-	if (!brand_p) /* MALLOC FAILURE! */
-		return (o ? free(p), -1 : -1);
+	ptrC = str_chr(buf + j, '\n');
+	n = ptrC ? 1 + (unsigned int)(ptrC - buf) : size;
+	newBlock = reallocmem(ptrP, m, m ? m + n : n + 1);
+	if (!newBlock) /* MALLOC FAILURE! */
+		return (ptrP ? free(ptrP), -1 : -1);
 
-	if (t)
-		str_n_cat(brand_p, buf + j, m - j);
+	if (m)
+		str_n_cat(newBlock, buf + j, n - j);
 	else
-		str_n_cpy(brand_p, buf + j, m - j + 1);
+		str_n_cpy(newBlock, buf + j, n - j + 1);
 
-	t += m - j;
-	j = m;
-	o = brand_p;
+	m += n - j;
+	j = n;
+	ptrP = newBlock;
 
-	if (girth)
-		*girth = t;
-	*str = o;
-	return (t);
+	if (length)
+		*length = m;
+	*ptr = ptrP;
+	return (m);
 }
 
 /**
@@ -161,7 +162,7 @@ int custGetLine(system *systeminfo, char **str, size_t *girth)
  *
  * Return: void
  */
-void handleSigint(__attribute__((unused))int signo)
+void sigintHandler(__attribute__((unused))int sig_num)
 {
 	_puts("\n");
 	_puts("$ ");
