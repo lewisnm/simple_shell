@@ -132,6 +132,7 @@ void child_fork(d_type *d_typeinfo)
 	branch_pid = fork();
 	if (branch_pid == -1)
 	{
+		/* TODO: PUT ERROR FUNCTION */
 		perror("Error:");
 		return;
 	}
@@ -144,6 +145,7 @@ void child_fork(d_type *d_typeinfo)
 				exit(126);
 			exit(1);
 		}
+		/* TODO: PUT ERROR FUNCTION */
 	}
 	else
 	{
