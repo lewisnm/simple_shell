@@ -11,6 +11,7 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <signal.h>
 
 /* used to define custom getline()*/
 #define ENABLE_GETLINE 0

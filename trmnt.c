@@ -7,21 +7,21 @@
  *@no: no of chrs to be copied
  *Return: the concatenated string
  */
-char *str_n_cpy(char *destin, char *srcString, int n)
+char *str_n_cpy(char *destin, char *srcString, int no)
 {
 	int k, i;
 	char *str = destin;
 
 	k = 0;
-	while (srcString[k] != '\0' && k < n - 1)
+	while (srcString[k] != '\0' && k < no - 1)
 	{
 		destin[k] = srcString[k];
 		k++;
 	}
-	if (k < n)
+	if (k < no)
 	{
 		i = k;
-		while (i < n)
+		while (i < no)
 		{
 			destin[i] = '\0';
 			i++;
@@ -32,12 +32,12 @@ char *str_n_cpy(char *destin, char *srcString, int n)
 
 /**
  **str_n_cat - joins two strings
- *@trgt: first string
- *@ori: second string
- *@num: num of bytes used
+ *@destin: first string
+ *@srcString: second string
+ *@no: num of bytes used
  *Return: the concatenated string
  */
-char *str_n_cat(char *destin, char *srcString, int n)
+char *str_n_cat(char *destin, char *srcString, int no)
 {
 	int k, i;
 	char *str = destin;
@@ -46,13 +46,13 @@ char *str_n_cat(char *destin, char *srcString, int n)
 	i = 0;
 	while (destin[k] != '\0')
 		k++;
-	while (srcString[i] != '\0' && i < n)
+	while (srcString[i] != '\0' && i < no)
 	{
 		destin[k] = srcString[i];
 		k++;
 		i++;
 	}
-	if (i < n)
+	if (i < no)
 		destin[k] = '\0';
 	return (str);
 }
@@ -60,7 +60,7 @@ char *str_n_cat(char *destin, char *srcString, int n)
 /**
  **str_chr - finds a char in a string
  *@str: string being checked
- *@cha: char being searched
+ *@y: char being searched
  *Return: (str) a pointer to the memory area str
  */
 char *str_chr(char *str, char y)

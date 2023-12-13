@@ -11,7 +11,7 @@ int exitbin(d_type *d_typeinfo)
 {
 	int exitcheck;
 
-	if (d_typeinfo->argvstr[1])  /* If there is an exit arguement */
+	if (d_typeinfo->argvstr[1])
 	{
 		exitcheck = atoiErr(d_typeinfo->argvstr[1]);
 		if (exitcheck == -1)
@@ -47,7 +47,7 @@ int cdbin(d_type *d_typeinfo)
 	{
 		dir = retrienv(d_typeinfo, "HOME=");
 		if (!dir)
-			chdir_ret = /* TODO: what should this be? */
+			chdir_ret =
 				chdir((dir = retrienv(d_typeinfo, "PWD=")) ? dir : "/");
 		else
 			chdir_ret = chdir(dir);
@@ -61,7 +61,7 @@ int cdbin(d_type *d_typeinfo)
 			return (1);
 		}
 		_puts(retrienv(d_typeinfo, "OLDPWD=")), _putchar('\n');
-		chdir_ret = /* TODO: what should this be? */
+		chdir_ret =
 			chdir((dir = retrienv(d_typeinfo, "OLDPWD=")) ? dir : "/");
 	}
 	else
@@ -92,6 +92,6 @@ int helpbin(d_type *d_typeinfo)
 	arg_array = d_typeinfo->argvstr;
 	_puts("help call works. Function not yet implemented \n");
 	if (0)
-		_puts(*arg_array); /* temp att_unused workaround */
+		_puts(*arg_array);
 	return (0);
 }

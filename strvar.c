@@ -23,9 +23,9 @@ int check_opp(d_type *d_typeinfo, char *buf, size_t *s)
 		k++;
 		d_typeinfo->buf_operation = AND;
 	}
-	else if (buf[k] == ';') /* found end of this command */
+	else if (buf[k] == ';')
 	{
-		buf[k] = 0; /* replace semicolon with null */
+		buf[k] = 0;
 		d_typeinfo->buf_operation = CHAIN;
 	}
 	else

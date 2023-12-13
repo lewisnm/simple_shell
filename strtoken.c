@@ -2,7 +2,7 @@
 
 /**
  * **tkzStr - function to split user input string into arguments
- * @str: user input, char array string
+ * @string: user input, char array string
  * @dlmt: delimiter character
  * Return: NULL if fail, else ptr to string array
  */
@@ -17,7 +17,8 @@ char **tkzStr(char *string, char *dlmt)
 	if (!dlmt)
 		dlmt = " ";
 	for (j = 0; string[j] != '\0'; j++)
-		if (!delimchar(string[j], dlmt) && (delimchar(string[j + 1], dlmt) || !string[j + 1]))
+		if (!delimchar(string[j], dlmt) &&
+			(delimchar(string[j + 1], dlmt) || !string[j + 1]))
 			wordcount++;
 
 	if (wordcount == 0)

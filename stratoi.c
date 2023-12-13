@@ -11,63 +11,64 @@ int modsys(d_type *d_typeinfo)
 	return (isatty(STDIN_FILENO) && d_typeinfo->rdfiledes <= 2);
 }
 
-/* delim - function to identify delimiter character in a string
- * @z: char to be checked whether or not delimiter
+/**
+ * delimchar - function to identify delimiter character in a string
+ * @s: char to be checked whether or not delimiter
  * @delimiter: delimiter char taken as string
  * Return: if true, comp returns 1, and 0 for false
  */
-int delimchar(char c, char *delim)
+int delimchar(char s, char *delimiter)
 {
-	while (*delim)
-		if (*delim++ == c)
+	while (*delimiter)
+		if (*delimiter++ == s)
 			return (1);
 	return (0);
 }
 
 /**
  *alphachar - custom isalpha to check for alphabetic chrctr
- *@z: denotes input character
+ *@s: denotes input character
  *Return: 0 if char not alphabet, 1 if alphabet char is found
  */
 
-int alphachar(int c)
+int alphachar(int s)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+	if ((s >= 'a' && s <= 'z') || (s >= 'A' && s <= 'Z'))
 		return (1);
 	else
 		return (0);
 }
 
 /**
- *strint - converts a string to an integer
- *@atoistr: the string to be converted
+ *strtint - converts a string to an integer
+ *@s: the string to be converted
  *Return: 0 if no numbers in string, converted number otherwise
  */
 
 int strtint(char *s)
 {
-	int i, sign = 1, flag = 0, output;
-	unsigned int result = 0;
+	int k, symbol = 1, id = 0, prnt;
+	unsigned int product = 0;
 
-	for (i = 0;  s[i] != '\0' && flag != 2; i++)
+	for (k = 0;  s[k] != '\0' && id != 2; k++)
 	{
-		if (s[i] == '-')
-			sign *= -1;
+		if (s[k] == '-')
+			symbol *= -1;
 
-		if (s[i] >= '0' && s[i] <= '9')
+		if (s[k] >= '0' && s[k] <= '9')
 		{
-			flag = 1;
-			result *= 10;
-			result += (s[i] - '0');
+			id = 1;
+			product *= 10;
+			product += (s[k] - '0');
 		}
-		else if (flag == 1)
-			flag = 2;
+		else if (id == 1)
+			id = 2;
 	}
 
-	if (sign == -1)
-		output = -result;
+	if (symbol == -1)
+		prnt = -product;
 	else
-		output = result;
+		prnt = product;
 
-	return (output);
+	return (prnt);
 }

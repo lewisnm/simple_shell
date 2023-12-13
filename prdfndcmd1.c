@@ -14,41 +14,41 @@ int histdisp(d_type *d_typeinfo)
 /**
  * rmaka - removes alias to string
  * @d_typeinfo: parameter struct
- * @word: the string alias
+ * @string: the string alias
  *
  * Return:0 on success, 1 on error
  */
 int rmaka(d_type *d_typeinfo, char *string)
 {
-	char *p, c;
-	int ret;
+	char *f, j;
+	int rslt;
 
-	p = str_chr(string, '=');
-	if (!p)
+	f = str_chr(string, '=');
+	if (!f)
 		return (1);
-	c = *p;
-	*p = 0;
-	ret = rmnodeindex(&(d_typeinfo->aka),
+	j = *f;
+	*f = 0;
+	rslt = rmnodeindex(&(d_typeinfo->aka),
 		retrindex(d_typeinfo->aka, specprefix(d_typeinfo->aka, string, -1)));
-	*p = c;
-	return (ret);
+	*f = j;
+	return (rslt);
 }
 
 /**
  * setaka - sets alias to string
  * @d_typeinfo: parameter struct
- * @word: the string alias
+ * @string: the string alias
  *
  * Return: 0 on success, 1 on error
  */
 int setaka(d_type *d_typeinfo, char *string)
 {
-	char *p;
+	char *f;
 
-	p = str_chr(string, '=');
-	if (!p)
+	f = str_chr(string, '=');
+	if (!f)
 		return (1);
-	if (!*++p)
+	if (!*++f)
 		return (rmaka(d_typeinfo, string));
 
 	rmaka(d_typeinfo, string);
@@ -57,21 +57,21 @@ int setaka(d_type *d_typeinfo, char *string)
 
 /**
  * printaka - prints an alias string
- * @nde: the alias node
+ * @nde: the alias nde
  *
  * Return: Always 0 on success, 1 on error
  */
-int printaka(lst_t *node)
+int printaka(lst_t *nde)
 {
-	char *p = NULL, *a = NULL;
+	char *f = NULL, *a = NULL;
 
-	if (node)
+	if (nde)
 	{
-		p = str_chr(node->string, '=');
-		for (a = node->string; a <= p; a++)
+		f = str_chr(nde->string, '=');
+		for (a = nde->string; a <= f; a++)
 			_putchar(*a);
 		_putchar('\'');
-		_puts(p + 1);
+		_puts(f + 1);
 		_puts("'\n");
 		return (0);
 	}
@@ -86,23 +86,23 @@ int printaka(lst_t *node)
 int createaka(d_type *d_typeinfo)
 {
 	int i = 0;
-	char *p = NULL;
-	lst_t *node = NULL;
+	char *f = NULL;
+	lst_t *nde = NULL;
 
 	if (d_typeinfo->argc_no == 1)
 	{
-		node = d_typeinfo->aka;
-		while (node)
+		nde = d_typeinfo->aka;
+		while (nde)
 		{
-			printaka(node);
-			node = node->next_node;
+			printaka(nde);
+			nde = nde->next_node;
 		}
 		return (0);
 	}
 	for (i = 1; d_typeinfo->argvstr[i]; i++)
 	{
-		p = str_chr(d_typeinfo->argvstr[i], '=');
-		if (p)
+		f = str_chr(d_typeinfo->argvstr[i], '=');
+		if (f)
 			setaka(d_typeinfo, d_typeinfo->argvstr[i]);
 		else
 			printaka(specprefix(d_typeinfo->aka, d_typeinfo->argvstr[i], '='));

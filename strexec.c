@@ -100,7 +100,8 @@ void search_cmd(d_type *d_typeinfo)
 	if (!m)
 		return;
 
-	path = cmd_path(d_typeinfo, retrienv(d_typeinfo, "PATH="), d_typeinfo->argvstr[0]);
+	path = cmd_path(d_typeinfo,
+				retrienv(d_typeinfo, "PATH="), d_typeinfo->argvstr[0]);
 	if (path)
 	{
 		d_typeinfo->path = path;
@@ -109,7 +110,8 @@ void search_cmd(d_type *d_typeinfo)
 	else
 	{
 		if ((modsys(d_typeinfo) || retrienv(d_typeinfo, "PATH=")
-			|| d_typeinfo->argvstr[0][0] == '/') && cmd_exist(d_typeinfo, d_typeinfo->argvstr[0]))
+			|| d_typeinfo->argvstr[0][0] == '/') &&
+						cmd_exist(d_typeinfo, d_typeinfo->argvstr[0]))
 			child_fork(d_typeinfo);
 		else if (*(d_typeinfo->argstr) != '\n')
 		{
@@ -132,7 +134,6 @@ void child_fork(d_type *d_typeinfo)
 	branch_pid = fork();
 	if (branch_pid == -1)
 	{
-		/* TODO: PUT ERROR FUNCTION */
 		perror("Error:");
 		return;
 	}
@@ -145,7 +146,6 @@ void child_fork(d_type *d_typeinfo)
 				exit(126);
 			exit(1);
 		}
-		/* TODO: PUT ERROR FUNCTION */
 	}
 	else
 	{
