@@ -1,7 +1,7 @@
 #include "dupshell.h"
 
 /**
- * input_buf - chained commands in buff
+ * putbuf - chained commands in buff
  * @d_typeinfo: param struct
  * @buf: address of buffer
  * @size: address of varbl size
@@ -88,10 +88,10 @@ ssize_t getSysInput(d_type *d_typeinfo)
 }
 
 /**
- * read_buf - reads a buffer
+ * wade_buf - reads a buffer
  * @d_typeinfo: parameter struct
  * @buf: buffer
- * @j: size
+ * @q: size
  *
  * Return: w
  */
@@ -110,8 +110,8 @@ ssize_t read_buf(d_type *d_typeinfo, char *buf, size_t *j)
 /**
  * custGetLine - gets the next line of input from STDIN
  * @d_typeinfo: parameter struct
- * @ptr: address of pointer to buffer, preallocated or NULL
- * @length: size of preallocated ptr buffer if not NULL
+ * @str: address of pointer to buffer, preallocated or NULL
+ * @girth: size of preallocated ptr buffer if not NULL
  *
  * Return: t
  */
@@ -155,12 +155,12 @@ int custGetLine(d_type *d_typeinfo, char **ptr, size_t *length)
 }
 
 /**
- * sigintHandler - blocks ctrl-C
+ * handleSigint - blocks ctrl-C
  * @signo: the signal number
  *
  * Return: void
  */
-void sigintHandler(__attribute__((unused))int signo)
+void sigintHandler(__attribute__((unused))int sig_num)
 {
 	_puts("\n");
 	_puts("$ ");

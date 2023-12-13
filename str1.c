@@ -66,7 +66,7 @@ void _puts(char *string)
 
 /**
  * _putchar - writes the character s to stdout
- * @s: The character to print
+ * @ch: The character to print
  *
  * Return: On success 1 or -1 for an error
  */

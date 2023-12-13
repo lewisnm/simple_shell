@@ -11,10 +11,9 @@ int modsys(d_type *d_typeinfo)
 	return (isatty(STDIN_FILENO) && d_typeinfo->rdfiledes <= 2);
 }
 
-/**
- * delimchar - function to identify delimiter character in a string
- * @c: char to be checked whether or not delimiter
- * @delim: delimiter char taken as string
+/* delim - function to identify delimiter character in a string
+ * @z: char to be checked whether or not delimiter
+ * @delimiter: delimiter char taken as string
  * Return: if true, comp returns 1, and 0 for false
  */
 int delimchar(char c, char *delim)
@@ -27,7 +26,7 @@ int delimchar(char c, char *delim)
 
 /**
  *alphachar - custom isalpha to check for alphabetic chrctr
- *@c: denotes input character
+ *@z: denotes input character
  *Return: 0 if char not alphabet, 1 if alphabet char is found
  */
 
@@ -40,8 +39,8 @@ int alphachar(int c)
 }
 
 /**
- *strtint - converts a string to an integer
- *@s: the string to be converted
+ *strint - converts a string to an integer
+ *@atoistr: the string to be converted
  *Return: 0 if no numbers in string, converted number otherwise
  */
 
