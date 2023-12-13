@@ -17,8 +17,7 @@ char **tkzStr(char *string, char *dlmt)
 	if (!dlmt)
 		dlmt = " ";
 	for (j = 0; string[j] != '\0'; j++)
-		if (!delimchar(string[j], dlmt) &&
-			(delimchar(string[j + 1], dlmt) || !string[j + 1]))
+		if (!delimchar(string[j], dlmt) && (delimchar(string[j + 1], dlmt) || !string[j + 1]))
 			wordcount++;
 
 	if (wordcount == 0)
