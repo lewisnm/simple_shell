@@ -12,7 +12,7 @@ int atoiErr(char *str)
 	unsigned long int finding = 0;
 
 	if (*str == '+')
-		str++;  /* TODO: why does this make main return 255? */
+		str++;
 	for (k = 0;  str[k] != '\0'; k++)
 	{
 		if (str[k] >= '0' && str[k] <= '9')

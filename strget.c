@@ -13,9 +13,8 @@ ssize_t input_buf(d_type *d_typeinfo, char **buf, size_t *size)
 	ssize_t s = 0;
 	size_t lenVar = 0;
 
-	if (!*size) /* if nothing left in the buffer, fill it */
+	if (!*size)
 	{
-		/*clearmem((void **)d_typeinfo->cmd_buf);*/
 		free(*buf);
 		*buf = NULL;
 		signal(SIGINT, sigintHandler);
@@ -28,13 +27,12 @@ ssize_t input_buf(d_type *d_typeinfo, char **buf, size_t *size)
 		{
 			if ((*buf)[s - 1] == '\n')
 			{
-				(*buf)[s - 1] = '\0'; /* remove trailing newline */
+				(*buf)[s - 1] = '\0';
 				s--;
 			}
 			d_typeinfo->counter_line = 1;
 			strip_comments(*buf);
 			conhistlist(d_typeinfo, *buf, d_typeinfo->numhist++);
-			/* if (str_chr(*buf, ';')) is this a command chain? */
 			{
 				*size = s;
 				d_typeinfo->buf_cmd = buf;
@@ -52,41 +50,41 @@ ssize_t input_buf(d_type *d_typeinfo, char **buf, size_t *size)
  */
 ssize_t getSysInput(d_type *d_typeinfo)
 {
-	static char *buf; /* the ';' command chain buffer */
+	static char *buf;
 	static size_t j, i, size;
 	ssize_t s = 0;
 	char **buf_p = &(d_typeinfo->argstr), *ptrP;
 
 	_putchar(FLUSH_INDICATOR);
 	s = input_buf(d_typeinfo, &buf, &size);
-	if (s == -1) /* EOF */
+	if (s == -1)
 		return (-1);
-	if (size)	/* we have commands left in the chain buffer */
+	if (size)
 	{
-		i = j; /* init new iterator to current buf position */
-		ptrP = buf + j; /* get pointer for return */
+		i = j;
+		ptrP = buf + j;
 
 		chainproc(d_typeinfo, buf, &i, j, size);
-		while (i < size) /* iterate to semicolon or end */
+		while (i < size)
 		{
 			if (check_opp(d_typeinfo, buf, &i))
 				break;
 			i++;
 		}
 
-		j = i + 1; /* increment past nulled ';'' */
-		if (j >= size) /* reached end of buffer? */
+		j = i + 1;
+		if (j >= size)
 		{
-			j = size = 0; /* reset position and length */
+			j = size = 0;
 			d_typeinfo->buf_operation = NORM;
 		}
 
-		*buf_p = ptrP; /* pass back pointer to current command position */
-		return (str_len(ptrP)); /* return length of current command */
+		*buf_p = ptrP;
+		return (str_len(ptrP));
 	}
 
-	*buf_p = buf; /* else not a chain, pass back buffer from custGetLine() */
-	return (s); /* return length of buffer from custGetLine() */
+	*buf_p = buf;
+	return (s);
 }
 
 /**
@@ -138,7 +136,7 @@ int custGetLine(d_type *d_typeinfo, char **ptr, size_t *length)
 	ptrC = str_chr(buf + j, '\n');
 	n = ptrC ? 1 + (unsigned int)(ptrC - buf) : size;
 	newBlock = reallocmem(ptrP, m, m ? m + n : n + 1);
-	if (!newBlock) /* MALLOC FAILURE! */
+	if (!newBlock)
 		return (ptrP ? free(ptrP), -1 : -1);
 
 	if (m)
